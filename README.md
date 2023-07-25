@@ -1,1 +1,1 @@
-# kratos-gorm-example
+# Kratos GORM ORM实例
