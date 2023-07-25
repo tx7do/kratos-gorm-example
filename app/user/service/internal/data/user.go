@@ -29,7 +29,7 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 	}
 }
 
-func (r *UserRepo) convertEntToProto(in *models.User) *v1.User {
+func (r *UserRepo) convertModelToProto(in *models.User) *v1.User {
 	if in == nil {
 		return nil
 	}
@@ -56,7 +56,7 @@ func (r *UserRepo) List(_ context.Context, req *pagination.PagingRequest) (*v1.L
 
 	items := make([]*v1.User, 0, len(results))
 	for _, res := range results {
-		item := r.convertEntToProto(&res)
+		item := r.convertModelToProto(&res)
 		items = append(items, item)
 	}
 
@@ -76,7 +76,7 @@ func (r *UserRepo) List(_ context.Context, req *pagination.PagingRequest) (*v1.L
 func (r *UserRepo) Get(_ context.Context, req *v1.GetUserRequest) (*v1.User, error) {
 	res := &models.User{}
 	r.data.db.First(res, "id = ?", req.GetId())
-	return r.convertEntToProto(res), nil
+	return r.convertModelToProto(res), nil
 }
 
 func (r *UserRepo) Create(_ context.Context, req *v1.CreateUserRequest) (*v1.User, error) {
@@ -96,7 +96,7 @@ func (r *UserRepo) Create(_ context.Context, req *v1.CreateUserRequest) (*v1.Use
 		return nil, result.Error
 	}
 
-	return r.convertEntToProto(res), err
+	return r.convertModelToProto(res), err
 }
 
 func (r *UserRepo) Update(_ context.Context, req *v1.UpdateUserRequest) (*v1.User, error) {
@@ -120,7 +120,7 @@ func (r *UserRepo) Update(_ context.Context, req *v1.UpdateUserRequest) (*v1.Use
 		return nil, result.Error
 	}
 
-	return r.convertEntToProto(res), err
+	return r.convertModelToProto(res), err
 }
 
 func (r *UserRepo) Delete(_ context.Context, req *v1.DeleteUserRequest) (bool, error) {
