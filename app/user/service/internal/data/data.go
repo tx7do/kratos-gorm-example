@@ -82,7 +82,7 @@ func NewGormClient(cfg *conf.Bootstrap, logger log.Logger) *gorm.DB {
 	// 运行数据库迁移工具
 	if cfg.Data.Database.Migrate {
 		if err := client.AutoMigrate(
-			&models.User{},
+			models.GetMigrates()...,
 		); err != nil {
 			l.Fatalf("failed creating schema resources: %v", err)
 		}

@@ -2,10 +2,11 @@ package data
 
 import (
 	"context"
+	"gorm.io/gorm/clause"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/tx7do/kratos-utils/crypto"
-	util "github.com/tx7do/kratos-utils/time"
+	"github.com/tx7do/go-utils/crypto"
+	util "github.com/tx7do/go-utils/timeutil"
 
 	"kratos-gorm-example/app/user/service/internal/biz"
 	"kratos-gorm-example/app/user/service/internal/data/models"
@@ -116,6 +117,33 @@ func (r *UserRepo) Update(_ context.Context, req *v1.UpdateUserRequest) (*v1.Use
 	}
 
 	result := r.data.db.Model(res).Updates(res)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return r.convertModelToProto(res), err
+}
+
+func (r *UserRepo) Upsert(_ context.Context, req *v1.UpdateUserRequest) (*v1.User, error) {
+	var cryptoPassword string
+	var err error
+	if req.User.Password != nil {
+		cryptoPassword, err = crypto.HashPassword(req.User.GetPassword())
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &models.User{
+		UserName: req.User.GetUserName(),
+		NickName: req.User.GetNickName(),
+		Password: cryptoPassword,
+	}
+
+	result := r.data.db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "id"}},
+		UpdateAll: true,
+	}).Create(res)
 	if result.Error != nil {
 		return nil, result.Error
 	}
