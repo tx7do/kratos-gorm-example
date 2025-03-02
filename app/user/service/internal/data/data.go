@@ -2,7 +2,6 @@ package data
 
 import (
 	"github.com/go-kratos/kratos/v2/log"
-
 	"github.com/go-redis/redis/v8"
 
 	"gorm.io/driver/clickhouse"
@@ -14,7 +13,9 @@ import (
 	"gorm.io/gorm"
 
 	"kratos-gorm-example/app/user/service/internal/data/models"
-	"kratos-gorm-example/gen/api/go/common/conf"
+
+	"kratos-gorm-example/api/gen/go/common/conf"
+
 	"kratos-gorm-example/pkg/bootstrap"
 )
 
@@ -77,6 +78,7 @@ func NewGormClient(cfg *conf.Bootstrap, logger log.Logger) *gorm.DB {
 	client, err := gorm.Open(driver, &gorm.Config{})
 	if err != nil {
 		l.Fatalf("failed opening connection to db: %v", err)
+		return nil
 	}
 
 	// 运行数据库迁移工具
@@ -85,6 +87,7 @@ func NewGormClient(cfg *conf.Bootstrap, logger log.Logger) *gorm.DB {
 			models.GetMigrates()...,
 		); err != nil {
 			l.Fatalf("failed creating schema resources: %v", err)
+			return nil
 		}
 	}
 	return client

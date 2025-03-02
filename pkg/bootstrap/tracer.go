@@ -11,7 +11,8 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	traceSdk "go.opentelemetry.io/otel/sdk/trace"
 	semConv "go.opentelemetry.io/otel/semconv/v1.4.0"
-	"kratos-gorm-example/gen/api/go/common/conf"
+
+	"kratos-gorm-example/api/gen/go/common/conf"
 )
 
 // NewJaegerExporter 创建一个jaeger导出器

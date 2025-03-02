@@ -2,11 +2,10 @@ package bootstrap
 
 import (
 	"github.com/go-kratos/kratos/v2/log"
-
 	"github.com/go-redis/redis/extra/redisotel/v8"
 	"github.com/go-redis/redis/v8"
 
-	"kratos-gorm-example/gen/api/go/common/conf"
+	"kratos-gorm-example/api/gen/go/common/conf"
 )
 
 // NewRedisClient 创建Redis客户端

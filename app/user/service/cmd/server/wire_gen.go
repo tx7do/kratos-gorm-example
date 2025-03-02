@@ -10,11 +10,11 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/registry"
+	"kratos-gorm-example/api/gen/go/common/conf"
 	"kratos-gorm-example/app/user/service/internal/biz"
 	"kratos-gorm-example/app/user/service/internal/data"
 	"kratos-gorm-example/app/user/service/internal/server"
 	"kratos-gorm-example/app/user/service/internal/service"
-	"kratos-gorm-example/gen/api/go/common/conf"
 )
 
 // Injectors from wire.go:

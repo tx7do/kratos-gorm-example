@@ -2,17 +2,17 @@ package data
 
 import (
 	"context"
-	"gorm.io/gorm/clause"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/tx7do/go-utils/crypto"
 	util "github.com/tx7do/go-utils/timeutil"
+	"gorm.io/gorm/clause"
 
 	"kratos-gorm-example/app/user/service/internal/biz"
 	"kratos-gorm-example/app/user/service/internal/data/models"
 
-	"kratos-gorm-example/gen/api/go/common/pagination"
-	v1 "kratos-gorm-example/gen/api/go/user/service/v1"
+	pagination "github.com/tx7do/kratos-bootstrap/api/gen/go/pagination/v1"
+	userV1 "kratos-gorm-example/api/gen/go/user/service/v1"
 )
 
 var _ biz.UserRepo = (*UserRepo)(nil)
@@ -30,11 +30,11 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 	}
 }
 
-func (r *UserRepo) convertModelToProto(in *models.User) *v1.User {
+func (r *UserRepo) convertModelToProto(in *models.User) *userV1.User {
 	if in == nil {
 		return nil
 	}
-	return &v1.User{
+	return &userV1.User{
 		Id:         uint32(in.ID),
 		UserName:   &in.UserName,
 		NickName:   &in.NickName,
@@ -44,7 +44,7 @@ func (r *UserRepo) convertModelToProto(in *models.User) *v1.User {
 	}
 }
 
-func (r *UserRepo) List(_ context.Context, req *pagination.PagingRequest) (*v1.ListUserResponse, error) {
+func (r *UserRepo) List(_ context.Context, req *pagination.PagingRequest) (*userV1.ListUserResponse, error) {
 	var results []models.User
 
 	result := r.data.db.
@@ -55,7 +55,7 @@ func (r *UserRepo) List(_ context.Context, req *pagination.PagingRequest) (*v1.L
 		return nil, result.Error
 	}
 
-	items := make([]*v1.User, 0, len(results))
+	items := make([]*userV1.User, 0, len(results))
 	for _, res := range results {
 		item := r.convertModelToProto(&res)
 		items = append(items, item)
@@ -68,19 +68,19 @@ func (r *UserRepo) List(_ context.Context, req *pagination.PagingRequest) (*v1.L
 		return nil, result.Error
 	}
 
-	return &v1.ListUserResponse{
+	return &userV1.ListUserResponse{
 		Total: int32(count),
 		Items: items,
 	}, nil
 }
 
-func (r *UserRepo) Get(_ context.Context, req *v1.GetUserRequest) (*v1.User, error) {
+func (r *UserRepo) Get(_ context.Context, req *userV1.GetUserRequest) (*userV1.User, error) {
 	res := &models.User{}
 	r.data.db.First(res, "id = ?", req.GetId())
 	return r.convertModelToProto(res), nil
 }
 
-func (r *UserRepo) Create(_ context.Context, req *v1.CreateUserRequest) (*v1.User, error) {
+func (r *UserRepo) Create(_ context.Context, req *userV1.CreateUserRequest) (*userV1.User, error) {
 	cryptoPassword, err := crypto.HashPassword(req.User.GetPassword())
 	if err != nil {
 		return nil, err
@@ -100,7 +100,7 @@ func (r *UserRepo) Create(_ context.Context, req *v1.CreateUserRequest) (*v1.Use
 	return r.convertModelToProto(res), err
 }
 
-func (r *UserRepo) Update(_ context.Context, req *v1.UpdateUserRequest) (*v1.User, error) {
+func (r *UserRepo) Update(_ context.Context, req *userV1.UpdateUserRequest) (*userV1.User, error) {
 	var cryptoPassword string
 	var err error
 	if req.User.Password != nil {
@@ -124,7 +124,7 @@ func (r *UserRepo) Update(_ context.Context, req *v1.UpdateUserRequest) (*v1.Use
 	return r.convertModelToProto(res), err
 }
 
-func (r *UserRepo) Upsert(_ context.Context, req *v1.UpdateUserRequest) (*v1.User, error) {
+func (r *UserRepo) Upsert(_ context.Context, req *userV1.UpdateUserRequest) (*userV1.User, error) {
 	var cryptoPassword string
 	var err error
 	if req.User.Password != nil {
@@ -151,7 +151,7 @@ func (r *UserRepo) Upsert(_ context.Context, req *v1.UpdateUserRequest) (*v1.Use
 	return r.convertModelToProto(res), err
 }
 
-func (r *UserRepo) Delete(_ context.Context, req *v1.DeleteUserRequest) (bool, error) {
+func (r *UserRepo) Delete(_ context.Context, req *userV1.DeleteUserRequest) (bool, error) {
 	result := r.data.db.Delete(&models.User{}, req.GetId())
 	if result.Error != nil {
 		return false, result.Error

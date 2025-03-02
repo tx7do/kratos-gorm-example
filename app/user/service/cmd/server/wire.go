@@ -7,6 +7,7 @@ package main
 
 import (
 	"github.com/google/wire"
+	"kratos-gorm-example/api/gen/go/common/conf"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -16,7 +17,6 @@ import (
 	"kratos-gorm-example/app/user/service/internal/data"
 	"kratos-gorm-example/app/user/service/internal/server"
 	"kratos-gorm-example/app/user/service/internal/service"
-	"kratos-gorm-example/gen/api/go/common/conf"
 )
 
 // initApp init kratos application.

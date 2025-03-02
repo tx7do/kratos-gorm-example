@@ -3,10 +3,9 @@ package bootstrap
 import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/minio/minio-go/v7"
-
 	"github.com/minio/minio-go/v7/pkg/credentials"
 
-	"kratos-gorm-example/gen/api/go/common/conf"
+	"kratos-gorm-example/api/gen/go/common/conf"
 )
 
 func NewMinIoClient(conf *conf.OSS) *minio.Client {

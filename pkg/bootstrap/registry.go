@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/registry"
+	"kratos-gorm-example/api/gen/go/common/conf"
 	"path/filepath"
 
 	// etcd
@@ -36,8 +37,6 @@ import (
 	// servicecomb
 	servicecombClient "github.com/go-chassis/sc-client"
 	servicecombKratos "github.com/go-kratos/kratos/contrib/registry/servicecomb/v2"
-
-	"kratos-gorm-example/gen/api/go/common/conf"
 )
 
 type RegistryType string
@@ -210,7 +209,7 @@ func NewKubernetesRegistry(_ *conf.Registry) *k8sRegistry.Registry {
 		return nil
 	}
 
-	reg := k8sRegistry.NewRegistry(clientSet)
+	reg := k8sRegistry.NewRegistry(clientSet, "")
 
 	return reg
 }
