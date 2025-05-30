@@ -8,21 +8,18 @@ import (
 	util "github.com/tx7do/go-utils/timeutil"
 	"gorm.io/gorm/clause"
 
-	"kratos-gorm-example/app/user/service/internal/biz"
 	"kratos-gorm-example/app/user/service/internal/data/models"
 
 	pagination "github.com/tx7do/kratos-bootstrap/api/gen/go/pagination/v1"
 	userV1 "kratos-gorm-example/api/gen/go/user/service/v1"
 )
 
-var _ biz.UserRepo = (*UserRepo)(nil)
-
 type UserRepo struct {
 	data *Data
 	log  *log.Helper
 }
 
-func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
+func NewUserRepo(data *Data, logger log.Logger) *UserRepo {
 	l := log.NewHelper(log.With(logger, "module", "user/repo/user-service"))
 	return &UserRepo{
 		data: data,
