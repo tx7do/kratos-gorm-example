@@ -155,7 +155,7 @@ func NewFluentLogger(cfg *conf.Logger) log.Logger {
 
 // NewAliyunLogger 创建一个新的日志记录器 - Aliyun
 func NewAliyunLogger(cfg *conf.Logger) log.Logger {
-	wrapped := aliyunLogger.NewAliyunLog(
+	wrapped, _ := aliyunLogger.NewAliyunLog(
 		aliyunLogger.WithProject(cfg.Aliyun.Project),
 		aliyunLogger.WithEndpoint(cfg.Aliyun.Endpoint),
 		aliyunLogger.WithAccessKey(cfg.Aliyun.AccessKey),
