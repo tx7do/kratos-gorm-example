@@ -304,7 +304,7 @@ type RegistryMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m RegistryMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -410,7 +410,7 @@ type Registry_ConsulMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Registry_ConsulMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -510,7 +510,7 @@ type Registry_EtcdMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Registry_EtcdMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -639,7 +639,7 @@ type Registry_ZooKeeperMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Registry_ZooKeeperMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -817,7 +817,7 @@ type Registry_NacosMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Registry_NacosMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -917,7 +917,7 @@ type Registry_KubernetesMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Registry_KubernetesMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1079,7 +1079,7 @@ type Registry_EurekaMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Registry_EurekaMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1191,7 +1191,7 @@ type Registry_PolarisMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Registry_PolarisMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1291,7 +1291,7 @@ type Registry_ServicecombMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Registry_ServicecombMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

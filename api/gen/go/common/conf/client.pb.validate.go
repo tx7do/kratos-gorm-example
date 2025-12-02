@@ -127,7 +127,7 @@ type ClientMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ClientMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -284,7 +284,7 @@ type Client_RESTMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Client_RESTMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -441,7 +441,7 @@ type Client_GRPCMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Client_GRPCMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

@@ -9,7 +9,6 @@ package main
 import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/registry"
 	"kratos-gorm-example/api/gen/go/common/conf"
 	"kratos-gorm-example/app/user/service/internal/data"
 	"kratos-gorm-example/app/user/service/internal/server"
@@ -19,7 +18,7 @@ import (
 // Injectors from wire.go:
 
 // initApp init kratos application.
-func initApp(logger log.Logger, registrar registry.Registrar, bootstrap *conf.Bootstrap) (*kratos.App, func(), error) {
+func initApp(logger log.Logger, bootstrap *conf.Bootstrap) (*kratos.App, func(), error) {
 	db := data.NewGormClient(bootstrap, logger)
 	client := data.NewRedisClient(bootstrap, logger)
 	dataData, cleanup, err := data.NewData(db, client, logger)
@@ -29,7 +28,7 @@ func initApp(logger log.Logger, registrar registry.Registrar, bootstrap *conf.Bo
 	userRepo := data.NewUserRepo(dataData, logger)
 	userService := service.NewUserService(logger, userRepo)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, userService)
-	app := newApp(logger, registrar, grpcServer)
+	app := newApp(logger, grpcServer)
 	return app, func() {
 		cleanup()
 	}, nil

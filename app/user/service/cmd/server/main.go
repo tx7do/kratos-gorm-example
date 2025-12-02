@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 
 	"kratos-gorm-example/pkg/bootstrap"
@@ -20,7 +19,7 @@ var (
 	)
 )
 
-func newApp(ll log.Logger, rr registry.Registrar, gs *grpc.Server) *kratos.App {
+func newApp(ll log.Logger, gs *grpc.Server) *kratos.App {
 	return kratos.New(
 		kratos.ID(Service.GetInstanceId()),
 		kratos.Name(Service.Name),
@@ -30,15 +29,14 @@ func newApp(ll log.Logger, rr registry.Registrar, gs *grpc.Server) *kratos.App {
 		kratos.Server(
 			gs,
 		),
-		kratos.Registrar(rr),
 	)
 }
 
 func main() {
 	// bootstrap
-	cfg, ll, reg := bootstrap.Bootstrap(Service)
+	cfg, ll := bootstrap.Bootstrap(Service)
 
-	app, cleanup, err := initApp(ll, reg, cfg)
+	app, cleanup, err := initApp(ll, cfg)
 	if err != nil {
 		panic(err)
 	}

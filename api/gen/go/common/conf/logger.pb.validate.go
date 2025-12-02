@@ -216,7 +216,7 @@ type LoggerMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m LoggerMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -325,7 +325,7 @@ type Logger_ZapMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Logger_ZapMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -435,7 +435,7 @@ type Logger_LogrusMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Logger_LogrusMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -537,7 +537,7 @@ type Logger_FluentMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Logger_FluentMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -645,7 +645,7 @@ type Logger_AliyunMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Logger_AliyunMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -753,7 +753,7 @@ type Logger_TencentMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Logger_TencentMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

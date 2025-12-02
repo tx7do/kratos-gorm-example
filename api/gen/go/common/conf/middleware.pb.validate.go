@@ -167,7 +167,7 @@ type MiddlewareMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m MiddlewareMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -271,7 +271,7 @@ type Middleware_AuthMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Middleware_AuthMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -373,7 +373,7 @@ type Middleware_RateLimiterMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Middleware_RateLimiterMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -483,7 +483,7 @@ type Middleware_MetricsMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Middleware_MetricsMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

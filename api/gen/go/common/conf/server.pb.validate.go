@@ -272,7 +272,7 @@ type ServerMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m ServerMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -462,7 +462,7 @@ type Server_RESTMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Server_RESTMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -623,7 +623,7 @@ type Server_GRPCMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Server_GRPCMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -760,7 +760,7 @@ type Server_WebsocketMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Server_WebsocketMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -861,7 +861,7 @@ type Server_MqttMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Server_MqttMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -960,7 +960,7 @@ type Server_KafkaMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Server_KafkaMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1060,7 +1060,7 @@ type Server_RabbitMQMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Server_RabbitMQMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1196,7 +1196,7 @@ type Server_SSEMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Server_SSEMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}
@@ -1296,7 +1296,7 @@ type Server_REST_CORSMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
 func (m Server_REST_CORSMultiError) Error() string {
-	var msgs []string
+	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
 	}

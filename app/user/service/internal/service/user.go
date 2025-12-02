@@ -4,11 +4,11 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v2/log"
+	pagination "github.com/tx7do/go-curd/api/gen/go/pagination/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"kratos-gorm-example/app/user/service/internal/data"
 
-	pagination "github.com/tx7do/kratos-bootstrap/api/gen/go/pagination/v1"
 	userV1 "kratos-gorm-example/api/gen/go/user/service/v1"
 )
 
