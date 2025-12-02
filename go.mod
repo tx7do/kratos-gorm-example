@@ -13,7 +13,7 @@ require (
 	github.com/gorilla/handlers v1.5.2
 	github.com/olekukonko/tablewriter v1.1.2
 	github.com/spf13/cobra v1.10.1
-	github.com/tx7do/go-curd/api v0.0.0-20251130102744-578afe084d05
+	github.com/tx7do/go-curd v0.0.1
 	github.com/tx7do/go-utils v1.1.34
 	github.com/tx7do/go-utils/copierutil v0.0.5
 	github.com/tx7do/go-utils/mapper v0.0.3

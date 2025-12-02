@@ -7,6 +7,7 @@ import (
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/crypto"
 	"github.com/tx7do/go-utils/mapper"
+	"gorm.io/gorm"
 
 	pagination "github.com/tx7do/go-curd/api/gen/go/pagination/v1"
 
@@ -27,8 +28,9 @@ type UserRepo struct {
 func NewUserRepo(data *Data, logger log.Logger) *UserRepo {
 	l := log.NewHelper(log.With(logger, "module", "user/repo/user-service"))
 	repo := &UserRepo{
-		data: data,
-		log:  l,
+		data:   data,
+		log:    l,
+		mapper: mapper.NewCopierMapper[userV1.User, models.User](),
 	}
 
 	repo.init()
@@ -42,10 +44,24 @@ func (r *UserRepo) init() {
 }
 
 func (r *UserRepo) List(_ context.Context, req *pagination.PagingRequest) (*userV1.ListUserResponse, error) {
+	if req == nil {
+		req = &pagination.PagingRequest{}
+	}
+
+	// 默认分页保护
+	pageSize := int(req.GetPageSize())
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+	page := int(req.GetPage())
+	if page <= 0 {
+		page = 1
+	}
+
 	var entities []*models.User
 	result := r.data.db.
-		Limit(int(req.GetPageSize())).
-		Offset(int(req.GetPageSize() * (req.GetPage() - 1))).
+		Limit(pageSize).
+		Offset(pageSize * (page - 1)).
 		Find(&entities)
 	if result.Error != nil {
 		return nil, result.Error
@@ -71,12 +87,20 @@ func (r *UserRepo) List(_ context.Context, req *pagination.PagingRequest) (*user
 }
 
 func (r *UserRepo) Get(_ context.Context, req *userV1.GetUserRequest) (*userV1.User, error) {
+	if req == nil {
+		return nil, nil
+	}
+
 	entity := &models.User{}
 	err := r.data.db.First(entity, "id = ?", req.GetId()).Error
 	return r.mapper.ToDTO(entity), err
 }
 
 func (r *UserRepo) Create(_ context.Context, req *userV1.CreateUserRequest) (*userV1.User, error) {
+	if req == nil || req.User == nil {
+		return nil, nil
+	}
+
 	cryptoPassword, err := crypto.HashPassword(req.User.GetPassword())
 	if err != nil {
 		return nil, err
@@ -97,6 +121,10 @@ func (r *UserRepo) Create(_ context.Context, req *userV1.CreateUserRequest) (*us
 }
 
 func (r *UserRepo) Update(_ context.Context, req *userV1.UpdateUserRequest) (*userV1.User, error) {
+	if req == nil || req.User == nil {
+		return nil, nil
+	}
+
 	var cryptoPassword string
 	var err error
 	if req.User.Password != nil {
@@ -107,20 +135,34 @@ func (r *UserRepo) Update(_ context.Context, req *userV1.UpdateUserRequest) (*us
 	}
 
 	entity := &models.User{
+		Model: gorm.Model{
+			ID: uint(req.User.GetId()),
+		},
 		UserName: req.User.GetUserName(),
 		NickName: req.User.GetNickName(),
 		Password: cryptoPassword,
 	}
 
-	result := r.data.db.Model(entity).Updates(entity)
+	result := r.data.db.
+		Model(&models.User{}).
+		Where("id = ?", entity.ID).
+		Updates(entity)
 	if result.Error != nil {
 		return nil, result.Error
+	}
+
+	if err = r.data.db.First(entity, "id = ?", entity.ID).Error; err != nil {
+		return nil, err
 	}
 
 	return r.mapper.ToDTO(entity), nil
 }
 
 func (r *UserRepo) Upsert(_ context.Context, req *userV1.UpdateUserRequest) (*userV1.User, error) {
+	if req == nil || req.User == nil {
+		return nil, nil
+	}
+
 	var err error
 
 	var cryptoPassword string
@@ -132,23 +174,36 @@ func (r *UserRepo) Upsert(_ context.Context, req *userV1.UpdateUserRequest) (*us
 	}
 
 	entity := &models.User{
+		Model: gorm.Model{
+			ID: uint(req.User.GetId()),
+		},
 		UserName: req.User.GetUserName(),
 		NickName: req.User.GetNickName(),
 		Password: cryptoPassword,
 	}
 
-	result := r.data.db.Clauses(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "id"}},
-		UpdateAll: true,
-	}).Create(entity)
+	result := r.data.db.
+		Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "id"}},
+			UpdateAll: true,
+		}).
+		Create(entity)
 	if result.Error != nil {
 		return nil, result.Error
+	}
+
+	if err = r.data.db.First(entity, "id = ?", entity.ID).Error; err != nil {
+		return nil, err
 	}
 
 	return r.mapper.ToDTO(entity), nil
 }
 
 func (r *UserRepo) Delete(_ context.Context, req *userV1.DeleteUserRequest) (bool, error) {
+	if req == nil {
+		return false, nil
+	}
+
 	result := r.data.db.Delete(&models.User{}, req.GetId())
 	if result.Error != nil {
 		return false, result.Error
