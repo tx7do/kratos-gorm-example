@@ -2,12 +2,14 @@ package data
 
 import (
 	"context"
+	"errors"
 
 	"github.com/go-kratos/kratos/v2/log"
+	"gorm.io/gorm"
+
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/crypto"
 	"github.com/tx7do/go-utils/mapper"
-	"gorm.io/gorm"
 
 	pagination "github.com/tx7do/go-curd/api/gen/go/pagination/v1"
 	gormCurd "github.com/tx7do/go-curd/gorm"
@@ -49,17 +51,7 @@ func (r *UserRepo) init() {
 
 func (r *UserRepo) List(ctx context.Context, req *pagination.PagingRequest) (*userV1.ListUserResponse, error) {
 	if req == nil {
-		req = &pagination.PagingRequest{}
-	}
-
-	// 默认分页保护
-	pageSize := int(req.GetPageSize())
-	if pageSize <= 0 {
-		pageSize = 10
-	}
-	page := int(req.GetPage())
-	if page <= 0 {
-		page = 1
+		return nil, errors.New("request is nil")
 	}
 
 	ret, err := r.repository.ListWithPaging(ctx, r.data.db, req)
@@ -78,7 +70,7 @@ func (r *UserRepo) List(ctx context.Context, req *pagination.PagingRequest) (*us
 
 func (r *UserRepo) Get(ctx context.Context, req *userV1.GetUserRequest) (*userV1.User, error) {
 	if req == nil {
-		return nil, nil
+		return nil, errors.New("request is nil")
 	}
 
 	var whereCond *gorm.DB
@@ -101,7 +93,7 @@ func (r *UserRepo) Get(ctx context.Context, req *userV1.GetUserRequest) (*userV1
 
 func (r *UserRepo) Create(ctx context.Context, req *userV1.CreateUserRequest) (*userV1.User, error) {
 	if req == nil || req.User == nil {
-		return nil, nil
+		return nil, errors.New("request is nil")
 	}
 
 	if req.User.Password != nil && req.User.GetPassword() != "" {
@@ -119,7 +111,7 @@ func (r *UserRepo) Create(ctx context.Context, req *userV1.CreateUserRequest) (*
 
 func (r *UserRepo) Update(ctx context.Context, req *userV1.UpdateUserRequest) (*userV1.User, error) {
 	if req == nil || req.User == nil {
-		return nil, nil
+		return nil, errors.New("request is nil")
 	}
 
 	if req.User.Password != nil && req.User.GetPassword() != "" {
@@ -137,7 +129,7 @@ func (r *UserRepo) Update(ctx context.Context, req *userV1.UpdateUserRequest) (*
 
 func (r *UserRepo) Upsert(ctx context.Context, req *userV1.UpdateUserRequest) (*userV1.User, error) {
 	if req == nil || req.User == nil {
-		return nil, nil
+		return nil, errors.New("request is nil")
 	}
 
 	var err error
@@ -157,7 +149,7 @@ func (r *UserRepo) Upsert(ctx context.Context, req *userV1.UpdateUserRequest) (*
 
 func (r *UserRepo) Delete(ctx context.Context, req *userV1.DeleteUserRequest) (bool, error) {
 	if req == nil {
-		return false, nil
+		return false, errors.New("request is nil")
 	}
 
 	result, err := r.repository.Delete(ctx, r.data.db.Where("id = ?", req.GetId()))
