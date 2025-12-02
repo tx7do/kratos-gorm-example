@@ -14,8 +14,9 @@ require (
 	github.com/olekukonko/tablewriter v1.1.2
 	github.com/spf13/cobra v1.10.1
 	github.com/tx7do/go-curd v0.0.1
+	github.com/tx7do/go-curd/gorm v0.0.2
 	github.com/tx7do/go-utils v1.1.34
-	github.com/tx7do/go-utils/copierutil v0.0.5
+	github.com/tx7do/go-utils/copierutil v0.0.6
 	github.com/tx7do/go-utils/mapper v0.0.3
 	go.opentelemetry.io/otel v1.38.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.17.0
@@ -106,4 +107,5 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20251124214823-79d6a2a48846 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251124214823-79d6a2a48846 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	gorm.io/plugin/opentelemetry v0.1.16 // indirect
 )
