@@ -2,3 +2,60 @@
 
 本项目是一个基于 Go 语言的微服务实践示例项目，核心定位为 **Kratos 微服务框架与 GORM ORM 工具的整合示范**。项目旨在降低开发者的学习与实践成本，通过完整的目录结构、配置示例和核心功能模块，展示如何在 Kratos 生态下高效集成 GORM 进行数据库操作，同时配套 Redis 缓存、标准化 API 定义、多服务注册中心等基础设施，为微服务项目的初始化提供可参考的实践模板。
 
+## API文档
+
+### Swagger UI
+
+- [Swagger UI](http://localhost:7788/docs/)
+
+### openapi.yaml
+
+- [openapi.yaml](http://localhost:7788/docs/openapi.yaml)
+
+## Make构建
+
+### 在后端项目根目录下执行：
+
+### 在`app/{服务名}/service`下执行：
+
+#### 生成API的go代码
+
+```bash
+make api
+```
+
+#### 生成API的OpenAPI v3 文档
+
+```bash
+make openapi
+```
+
+#### 生成ent代码
+
+```bash
+make ent
+```
+
+#### 生成wire代码
+
+```bash
+make wire
+```
+
+#### 构建二进制文件
+
+```bash
+make build
+```
+
+#### 调试运行
+
+```bash
+make run
+```
+
+#### 构建Docker镜像
+
+```bash
+make docker
+```
