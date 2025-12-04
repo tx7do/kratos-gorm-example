@@ -122,7 +122,9 @@ func (r *UserRepo) Update(ctx context.Context, req *userV1.UpdateUserRequest) (*
 		req.Data.Password = &cryptoPassword
 	}
 
-	result, err := r.repository.Update(ctx, r.data.db, req.Data, req.GetUpdateMask())
+	result, err := r.repository.Update(ctx,
+		r.data.db.Where("id = ?", req.Data.GetId()),
+		req.Data, req.GetUpdateMask())
 
 	return result, err
 }

@@ -84,12 +84,12 @@ message ListUserResponse {
 message GetUserRequest {
   oneof query_by {
     uint32 id = 1 [
-      (gnostic.openapi.v3.property) = {description: "用户ID", read_only: true},
+      (gnostic.openapi.v3.property) = {description: "用户ID", read_only: true, nullable: true},
       json_name = "id"
     ]; // 用户ID
 
     string user_name = 2 [
-      (gnostic.openapi.v3.property) = {description: "用户登录名", read_only: true},
+      (gnostic.openapi.v3.property) = {description: "用户登录名", read_only: true, nullable: true},
       json_name = "userName"
     ]; // 用户登录名
   }
