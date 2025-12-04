@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/go-kratos/kratos/v2/log"
-	pagination "github.com/tx7do/go-curd/api/gen/go/pagination/v1"
+	pagination "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
 	"github.com/tx7do/go-utils/trans"
 
 	"github.com/glebarez/sqlite"
@@ -42,7 +42,7 @@ func TestUserRepo_CreateGetListDelete(t *testing.T) {
 		NickName: strPtr("Alice"),
 		Password: strPtr("password123"),
 	}
-	created, err := repo.Create(ctx, &userV1.CreateUserRequest{User: in})
+	created, err := repo.Create(ctx, &userV1.CreateUserRequest{Data: in})
 	if err != nil {
 		t.Fatalf("Create failed: %v", err)
 	}

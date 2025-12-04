@@ -118,11 +118,12 @@ func (x *Server) GetSse() *Server_SSE {
 // REST
 type Server_REST struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Network       string                 `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`       // 网络
-	Addr          string                 `protobuf:"bytes,2,opt,name=addr,proto3" json:"addr,omitempty"`             // 服务监听地址
-	Timeout       *durationpb.Duration   `protobuf:"bytes,3,opt,name=timeout,proto3" json:"timeout,omitempty"`       // 超时时间
-	Cors          *Server_REST_CORS      `protobuf:"bytes,4,opt,name=cors,proto3" json:"cors,omitempty"`             // 服务监听地址
-	Middleware    *Middleware            `protobuf:"bytes,5,opt,name=middleware,proto3" json:"middleware,omitempty"` // 中间件
+	Network       string                 `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`                                   // 网络
+	Addr          string                 `protobuf:"bytes,2,opt,name=addr,proto3" json:"addr,omitempty"`                                         // 服务监听地址
+	Timeout       *durationpb.Duration   `protobuf:"bytes,3,opt,name=timeout,proto3" json:"timeout,omitempty"`                                   // 超时时间
+	Cors          *Server_REST_CORS      `protobuf:"bytes,4,opt,name=cors,proto3" json:"cors,omitempty"`                                         // 服务监听地址
+	Middleware    *Middleware            `protobuf:"bytes,5,opt,name=middleware,proto3" json:"middleware,omitempty"`                             // 中间件
+	EnableSwagger bool                   `protobuf:"varint,6,opt,name=enable_swagger,json=enableSwagger,proto3" json:"enable_swagger,omitempty"` // 是否启用Swagger
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -190,6 +191,13 @@ func (x *Server_REST) GetMiddleware() *Middleware {
 		return x.Middleware
 	}
 	return nil
+}
+
+func (x *Server_REST) GetEnableSwagger() bool {
+	if x != nil {
+		return x.EnableSwagger
+	}
+	return false
 }
 
 // gPRC
@@ -614,7 +622,7 @@ var File_common_conf_server_proto protoreflect.FileDescriptor
 
 const file_common_conf_server_proto_rawDesc = "" +
 	"\n" +
-	"\x18common/conf/server.proto\x12\vcommon.conf\x1a\x1egoogle/protobuf/duration.proto\x1a\x1ccommon/conf/middleware.proto\"\xc5\t\n" +
+	"\x18common/conf/server.proto\x12\vcommon.conf\x1a\x1egoogle/protobuf/duration.proto\x1a\x1ccommon/conf/middleware.proto\"\xec\t\n" +
 	"\x06Server\x12,\n" +
 	"\x04rest\x18\x01 \x01(\v2\x18.common.conf.Server.RESTR\x04rest\x12,\n" +
 	"\x04grpc\x18\x02 \x01(\v2\x18.common.conf.Server.GRPCR\x04grpc\x12;\n" +
@@ -622,7 +630,7 @@ const file_common_conf_server_proto_rawDesc = "" +
 	"\x04mqtt\x18\x04 \x01(\v2\x18.common.conf.Server.MqttR\x04mqtt\x12/\n" +
 	"\x05kafka\x18\x05 \x01(\v2\x19.common.conf.Server.KafkaR\x05kafka\x128\n" +
 	"\brabbitmq\x18\x06 \x01(\v2\x1c.common.conf.Server.RabbitMQR\brabbitmq\x12)\n" +
-	"\x03sse\x18\a \x01(\v2\x17.common.conf.Server.SSER\x03sse\x1a\xab\x02\n" +
+	"\x03sse\x18\a \x01(\v2\x17.common.conf.Server.SSER\x03sse\x1a\xd2\x02\n" +
 	"\x04REST\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +
@@ -630,7 +638,8 @@ const file_common_conf_server_proto_rawDesc = "" +
 	"\x04cors\x18\x04 \x01(\v2\x1d.common.conf.Server.REST.CORSR\x04cors\x127\n" +
 	"\n" +
 	"middleware\x18\x05 \x01(\v2\x17.common.conf.MiddlewareR\n" +
-	"middleware\x1aT\n" +
+	"middleware\x12%\n" +
+	"\x0eenable_swagger\x18\x06 \x01(\bR\renableSwagger\x1aT\n" +
 	"\x04CORS\x12\x18\n" +
 	"\aheaders\x18\x01 \x03(\tR\aheaders\x12\x18\n" +
 	"\amethods\x18\x02 \x03(\tR\amethods\x12\x18\n" +

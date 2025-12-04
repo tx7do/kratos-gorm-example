@@ -1,0 +1,14 @@
+server:
+  rest:
+    addr: ":7788"
+    timeout: 10s
+    enable_swagger: true
+    cors:
+      headers:
+        - "X-Requested-With"
+        - "Content-Type"
+        - "Authorization"
+  grpc:
+    addr: ":8899"
+    timeout: 10s
+    middleware:

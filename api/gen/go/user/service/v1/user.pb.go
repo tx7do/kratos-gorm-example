@@ -8,7 +8,8 @@ package servicev1
 
 import (
 	_ "github.com/google/gnostic/openapiv3"
-	v1 "github.com/tx7do/go-curd/api/gen/go/pagination/v1"
+	v1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
@@ -30,9 +31,9 @@ const (
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	UserName      *string                `protobuf:"bytes,2,opt,name=userName,proto3,oneof" json:"userName,omitempty"`
-	NickName      *string                `protobuf:"bytes,3,opt,name=nickName,proto3,oneof" json:"nickName,omitempty"`
-	Password      *string                `protobuf:"bytes,4,opt,name=password,proto3,oneof" json:"password,omitempty"`
+	UserName      *string                `protobuf:"bytes,2,opt,name=user_name,json=userName,proto3,oneof" json:"user_name,omitempty"`      // 账户名
+	NickName      *string                `protobuf:"bytes,3,opt,name=nick_name,json=nickName,proto3,oneof" json:"nick_name,omitempty"`      // 昵称
+	Password      *string                `protobuf:"bytes,4,opt,name=password,proto3,oneof" json:"password,omitempty"`                      // 密码
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,200,opt,name=created_at,json=createdAt,proto3,oneof" json:"created_at,omitempty"` // 创建时间
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,201,opt,name=updated_at,json=updatedAt,proto3,oneof" json:"updated_at,omitempty"` // 更新时间
 	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,202,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"` // 删除时间
@@ -178,7 +179,7 @@ type GetUserRequest struct {
 	// Types that are valid to be assigned to QueryBy:
 	//
 	//	*GetUserRequest_Id
-	//	*GetUserRequest_Username
+	//	*GetUserRequest_UserName
 	QueryBy       isGetUserRequest_QueryBy `protobuf_oneof:"query_by"`
 	ViewMask      *fieldmaskpb.FieldMask   `protobuf:"bytes,100,opt,name=view_mask,json=viewMask,proto3,oneof" json:"view_mask,omitempty"` // 视图字段过滤器，用于控制返回的字段
 	unknownFields protoimpl.UnknownFields
@@ -231,10 +232,10 @@ func (x *GetUserRequest) GetId() uint32 {
 	return 0
 }
 
-func (x *GetUserRequest) GetUsername() string {
+func (x *GetUserRequest) GetUserName() string {
 	if x != nil {
-		if x, ok := x.QueryBy.(*GetUserRequest_Username); ok {
-			return x.Username
+		if x, ok := x.QueryBy.(*GetUserRequest_UserName); ok {
+			return x.UserName
 		}
 	}
 	return ""
@@ -255,19 +256,19 @@ type GetUserRequest_Id struct {
 	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // 用户ID
 }
 
-type GetUserRequest_Username struct {
-	Username string `protobuf:"bytes,2,opt,name=username,proto3,oneof"` // 用户登录名
+type GetUserRequest_UserName struct {
+	UserName string `protobuf:"bytes,2,opt,name=user_name,json=userName,proto3,oneof"` // 用户登录名
 }
 
 func (*GetUserRequest_Id) isGetUserRequest_QueryBy() {}
 
-func (*GetUserRequest_Username) isGetUserRequest_QueryBy() {}
+func (*GetUserRequest_UserName) isGetUserRequest_QueryBy() {}
 
 // 创建用户 - 请求
 type CreateUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
-	OperatorId    uint32                 `protobuf:"varint,2,opt,name=operatorId,proto3" json:"operatorId,omitempty"`
+	Data          *User                  `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	OperatorId    uint32                 `protobuf:"varint,2,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"` // 操作者用户ID
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -302,9 +303,9 @@ func (*CreateUserRequest) Descriptor() ([]byte, []int) {
 	return file_user_service_v1_user_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *CreateUserRequest) GetUser() *User {
+func (x *CreateUserRequest) GetData() *User {
 	if x != nil {
-		return x.User
+		return x.Data
 	}
 	return nil
 }
@@ -319,7 +320,7 @@ func (x *CreateUserRequest) GetOperatorId() uint32 {
 // 更新用户 - 请求
 type UpdateUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	Data          *User                  `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	UpdateMask    *fieldmaskpb.FieldMask `protobuf:"bytes,2,opt,name=update_mask,json=updateMask,proto3" json:"update_mask,omitempty"`              // 要更新的字段列表
 	AllowMissing  *bool                  `protobuf:"varint,3,opt,name=allow_missing,json=allowMissing,proto3,oneof" json:"allow_missing,omitempty"` // 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
 	unknownFields protoimpl.UnknownFields
@@ -356,9 +357,9 @@ func (*UpdateUserRequest) Descriptor() ([]byte, []int) {
 	return file_user_service_v1_user_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *UpdateUserRequest) GetUser() *User {
+func (x *UpdateUserRequest) GetData() *User {
 	if x != nil {
-		return x.User
+		return x.Data
 	}
 	return nil
 }
@@ -381,7 +382,7 @@ func (x *UpdateUserRequest) GetAllowMissing() bool {
 type DeleteUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	OperatorId    uint32                 `protobuf:"varint,2,opt,name=operatorId,proto3" json:"operatorId,omitempty"`
+	OperatorId    uint32                 `protobuf:"varint,2,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"` // 操作者用户ID
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -434,60 +435,60 @@ var File_user_service_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_service_v1_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1auser/service/v1/user.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xcc\x03\n" +
+	"\x1auser/service/v1/user.proto\x12\x0fuser.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1cgoogle/api/annotations.proto\x1a\x1epagination/v1/pagination.proto\"\xfd\x03\n" +
 	"\x04User\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x1f\n" +
-	"\buserName\x18\x02 \x01(\tH\x00R\buserName\x88\x01\x01\x12\x1f\n" +
-	"\bnickName\x18\x03 \x01(\tH\x01R\bnickName\x88\x01\x01\x12\x1f\n" +
-	"\bpassword\x18\x04 \x01(\tH\x02R\bpassword\x88\x01\x01\x12S\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x121\n" +
+	"\tuser_name\x18\x02 \x01(\tB\x0f\xbaG\f\x92\x02\t账户名H\x00R\buserName\x88\x01\x01\x12.\n" +
+	"\tnick_name\x18\x03 \x01(\tB\f\xbaG\t\x92\x02\x06昵称H\x01R\bnickName\x88\x01\x01\x12-\n" +
+	"\bpassword\x18\x04 \x01(\tB\f\xbaG\t\x92\x02\x06密码H\x02R\bpassword\x88\x01\x01\x12S\n" +
 	"\n" +
 	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\x03R\tcreatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
 	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x04R\tupdatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x05R\tdeletedAt\x88\x01\x01B\v\n" +
-	"\t_userNameB\v\n" +
-	"\t_nickNameB\v\n" +
+	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x05R\tdeletedAt\x88\x01\x01B\f\n" +
+	"\n" +
+	"_user_nameB\f\n" +
+	"\n" +
+	"_nick_nameB\v\n" +
 	"\t_passwordB\r\n" +
 	"\v_created_atB\r\n" +
 	"\v_updated_atB\r\n" +
 	"\v_deleted_at\"U\n" +
 	"\x10ListUserResponse\x12+\n" +
 	"\x05items\x18\x01 \x03(\v2\x15.user.service.v1.UserR\x05items\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total\"\xfe\x01\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\"\xff\x01\n" +
 	"\x0eGetUserRequest\x12\"\n" +
-	"\x02id\x18\x01 \x01(\rB\x10\xbaG\r\x18\x01\x92\x02\b用户IDH\x00R\x02id\x125\n" +
-	"\busername\x18\x02 \x01(\tB\x17\xbaG\x14\x18\x01\x92\x02\x0f用户登录名H\x00R\busername\x12w\n" +
+	"\x02id\x18\x01 \x01(\rB\x10\xbaG\r\x18\x01\x92\x02\b用户IDH\x00R\x02id\x126\n" +
+	"\tuser_name\x18\x02 \x01(\tB\x17\xbaG\x14\x18\x01\x92\x02\x0f用户登录名H\x00R\buserName\x12w\n" +
 	"\tview_mask\x18d \x01(\v2\x1a.google.protobuf.FieldMaskB9\xbaG6\x92\x023视图字段过滤器，用于控制返回的字段H\x01R\bviewMask\x88\x01\x01B\n" +
 	"\n" +
 	"\bquery_byB\f\n" +
 	"\n" +
-	"_view_mask\"^\n" +
+	"_view_mask\"x\n" +
 	"\x11CreateUserRequest\x12)\n" +
-	"\x04user\x18\x01 \x01(\v2\x15.user.service.v1.UserR\x04user\x12\x1e\n" +
-	"\n" +
-	"operatorId\x18\x02 \x01(\rR\n" +
+	"\x04data\x18\x01 \x01(\v2\x15.user.service.v1.UserR\x04data\x128\n" +
+	"\voperator_id\x18\x02 \x01(\rB\x17\xbaG\x14\x92\x02\x11操作者用户IDR\n" +
 	"operatorId\"\xfc\x02\n" +
 	"\x11UpdateUserRequest\x12)\n" +
-	"\x04user\x18\x01 \x01(\v2\x15.user.service.v1.UserR\x04user\x12s\n" +
+	"\x04data\x18\x01 \x01(\v2\x15.user.service.v1.UserR\x04data\x12s\n" +
 	"\vupdate_mask\x18\x02 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x03 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"C\n" +
+	"\x0e_allow_missing\"]\n" +
 	"\x11DeleteUserRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x1e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x128\n" +
+	"\voperator_id\x18\x02 \x01(\rB\x17\xbaG\x14\x92\x02\x11操作者用户IDR\n" +
+	"operatorId2\x91\x04\n" +
+	"\vUserService\x12j\n" +
+	"\bListUser\x12\x19.pagination.PagingRequest\x1a!.user.service.v1.ListUserResponse\" \x82\xd3\xe4\x93\x02\x1aZ\x10:\x01*\"\v/users/list\x12\x06/users\x12u\n" +
+	"\aGetUser\x12\x1f.user.service.v1.GetUserRequest\x1a\x15.user.service.v1.User\"2\x82\xd3\xe4\x93\x02,Z\x1d\x12\x1b/users/username/{user_name}\x12\v/users/{id}\x12Z\n" +
 	"\n" +
-	"operatorId\x18\x02 \x01(\rR\n" +
-	"operatorId2\x80\x03\n" +
-	"\vUserService\x12J\n" +
-	"\bListUser\x12\x19.pagination.PagingRequest\x1a!.user.service.v1.ListUserResponse\"\x00\x12C\n" +
-	"\aGetUser\x12\x1f.user.service.v1.GetUserRequest\x1a\x15.user.service.v1.User\"\x00\x12I\n" +
+	"CreateUser\x12\".user.service.v1.CreateUserRequest\x1a\x15.user.service.v1.User\"\x11\x82\xd3\xe4\x93\x02\v:\x01*\"\x06/users\x12d\n" +
 	"\n" +
-	"CreateUser\x12\".user.service.v1.CreateUserRequest\x1a\x15.user.service.v1.User\"\x00\x12I\n" +
+	"UpdateUser\x12\".user.service.v1.UpdateUserRequest\x1a\x15.user.service.v1.User\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\x1a\x10/users/{data.id}\x12]\n" +
 	"\n" +
-	"UpdateUser\x12\".user.service.v1.UpdateUserRequest\x1a\x15.user.service.v1.User\"\x00\x12J\n" +
-	"\n" +
-	"DeleteUser\x12\".user.service.v1.DeleteUserRequest\x1a\x16.google.protobuf.Empty\"\x00B\xb8\x01\n" +
+	"DeleteUser\x12\".user.service.v1.DeleteUserRequest\x1a\x16.google.protobuf.Empty\"\x13\x82\xd3\xe4\x93\x02\r*\v/users/{id}B\xb8\x01\n" +
 	"\x13com.user.service.v1B\tUserProtoP\x01Z8kratos-gorm-example/api/gen/go/user/service/v1;servicev1\xa2\x02\x03USX\xaa\x02\x0fUser.Service.V1\xca\x02\x0fUser\\Service\\V1\xe2\x02\x1bUser\\Service\\V1\\GPBMetadata\xea\x02\x11User::Service::V1b\x06proto3"
 
 var (
@@ -521,8 +522,8 @@ var file_user_service_v1_user_proto_depIdxs = []int32{
 	6,  // 2: user.service.v1.User.deleted_at:type_name -> google.protobuf.Timestamp
 	0,  // 3: user.service.v1.ListUserResponse.items:type_name -> user.service.v1.User
 	7,  // 4: user.service.v1.GetUserRequest.view_mask:type_name -> google.protobuf.FieldMask
-	0,  // 5: user.service.v1.CreateUserRequest.user:type_name -> user.service.v1.User
-	0,  // 6: user.service.v1.UpdateUserRequest.user:type_name -> user.service.v1.User
+	0,  // 5: user.service.v1.CreateUserRequest.data:type_name -> user.service.v1.User
+	0,  // 6: user.service.v1.UpdateUserRequest.data:type_name -> user.service.v1.User
 	7,  // 7: user.service.v1.UpdateUserRequest.update_mask:type_name -> google.protobuf.FieldMask
 	8,  // 8: user.service.v1.UserService.ListUser:input_type -> pagination.PagingRequest
 	2,  // 9: user.service.v1.UserService.GetUser:input_type -> user.service.v1.GetUserRequest
@@ -549,7 +550,7 @@ func file_user_service_v1_user_proto_init() {
 	file_user_service_v1_user_proto_msgTypes[0].OneofWrappers = []any{}
 	file_user_service_v1_user_proto_msgTypes[2].OneofWrappers = []any{
 		(*GetUserRequest_Id)(nil),
-		(*GetUserRequest_Username)(nil),
+		(*GetUserRequest_UserName)(nil),
 	}
 	file_user_service_v1_user_proto_msgTypes[4].OneofWrappers = []any{}
 	type x struct{}

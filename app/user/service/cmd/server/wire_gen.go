@@ -28,7 +28,8 @@ func initApp(logger log.Logger, bootstrap *conf.Bootstrap) (*kratos.App, func(),
 	userRepo := data.NewUserRepo(dataData, logger)
 	userService := service.NewUserService(logger, userRepo)
 	grpcServer := server.NewGRPCServer(bootstrap, logger, userService)
-	app := newApp(logger, grpcServer)
+	httpServer := server.NewRESTServer(bootstrap, logger, userService)
+	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()
 	}, nil

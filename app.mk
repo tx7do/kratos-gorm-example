@@ -95,7 +95,7 @@ api:
 # generate OpenAPI v3 doc
 openapi:
 	@cd ../../../ && \
-	buf generate --path api/admin/service/v1 --template api/admin/service/v1/buf.openapi.gen.yaml
+	buf generate --template api/buf.openapi.gen.yaml
 
 # run application
 run:

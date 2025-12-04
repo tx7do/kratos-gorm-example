@@ -449,6 +449,8 @@ func (m *Server_REST) validate(all bool) error {
 		}
 	}
 
+	// no validation rules for EnableSwagger
+
 	if len(errors) > 0 {
 		return Server_RESTMultiError(errors)
 	}

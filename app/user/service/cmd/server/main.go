@@ -4,6 +4,7 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
+	"github.com/go-kratos/kratos/v2/transport/http"
 
 	"kratos-gorm-example/pkg/bootstrap"
 	"kratos-gorm-example/pkg/service"
@@ -19,7 +20,7 @@ var (
 	)
 )
 
-func newApp(ll log.Logger, gs *grpc.Server) *kratos.App {
+func newApp(ll log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 	return kratos.New(
 		kratos.ID(Service.GetInstanceId()),
 		kratos.Name(Service.Name),
@@ -28,6 +29,7 @@ func newApp(ll log.Logger, gs *grpc.Server) *kratos.App {
 		kratos.Logger(ll),
 		kratos.Server(
 			gs,
+			hs,
 		),
 	)
 }
@@ -42,7 +44,7 @@ func main() {
 	}
 	defer cleanup()
 
-	if err := app.Run(); err != nil {
+	if err = app.Run(); err != nil {
 		panic(err)
 	}
 }

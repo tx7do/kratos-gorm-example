@@ -11,8 +11,8 @@ import (
 	"github.com/tx7do/go-utils/crypto"
 	"github.com/tx7do/go-utils/mapper"
 
-	pagination "github.com/tx7do/go-curd/api/gen/go/pagination/v1"
-	gormCurd "github.com/tx7do/go-curd/gorm"
+	pagination "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
+	gormCurd "github.com/tx7do/go-crud/gorm"
 
 	"kratos-gorm-example/app/user/service/internal/data/models"
 
@@ -77,8 +77,8 @@ func (r *UserRepo) Get(ctx context.Context, req *userV1.GetUserRequest) (*userV1
 	switch req.QueryBy.(type) {
 	case *userV1.GetUserRequest_Id:
 		whereCond = r.data.db.Where("id = ?", req.GetId())
-	case *userV1.GetUserRequest_Username:
-		whereCond = r.data.db.Where("user_name = ?", req.GetUsername())
+	case *userV1.GetUserRequest_UserName:
+		whereCond = r.data.db.Where("user_name = ?", req.GetUserName())
 	default:
 		whereCond = r.data.db.Where("id = ?", req.GetId())
 	}
@@ -92,57 +92,57 @@ func (r *UserRepo) Get(ctx context.Context, req *userV1.GetUserRequest) (*userV1
 }
 
 func (r *UserRepo) Create(ctx context.Context, req *userV1.CreateUserRequest) (*userV1.User, error) {
-	if req == nil || req.User == nil {
+	if req == nil || req.Data == nil {
 		return nil, errors.New("request is nil")
 	}
 
-	if req.User.Password != nil && req.User.GetPassword() != "" {
-		cryptoPassword, err := crypto.HashPassword(req.User.GetPassword())
+	if req.Data.Password != nil && req.Data.GetPassword() != "" {
+		cryptoPassword, err := crypto.HashPassword(req.Data.GetPassword())
 		if err != nil {
 			return nil, err
 		}
-		req.User.Password = &cryptoPassword
+		req.Data.Password = &cryptoPassword
 	}
 
-	result, err := r.repository.Create(ctx, r.data.db, req.User, nil)
+	result, err := r.repository.Create(ctx, r.data.db, req.Data, nil)
 
 	return result, err
 }
 
 func (r *UserRepo) Update(ctx context.Context, req *userV1.UpdateUserRequest) (*userV1.User, error) {
-	if req == nil || req.User == nil {
+	if req == nil || req.Data == nil {
 		return nil, errors.New("request is nil")
 	}
 
-	if req.User.Password != nil && req.User.GetPassword() != "" {
-		cryptoPassword, err := crypto.HashPassword(req.User.GetPassword())
+	if req.Data.Password != nil && req.Data.GetPassword() != "" {
+		cryptoPassword, err := crypto.HashPassword(req.Data.GetPassword())
 		if err != nil {
 			return nil, err
 		}
-		req.User.Password = &cryptoPassword
+		req.Data.Password = &cryptoPassword
 	}
 
-	result, err := r.repository.Update(ctx, r.data.db, req.User, req.GetUpdateMask())
+	result, err := r.repository.Update(ctx, r.data.db, req.Data, req.GetUpdateMask())
 
 	return result, err
 }
 
 func (r *UserRepo) Upsert(ctx context.Context, req *userV1.UpdateUserRequest) (*userV1.User, error) {
-	if req == nil || req.User == nil {
+	if req == nil || req.Data == nil {
 		return nil, errors.New("request is nil")
 	}
 
 	var err error
 
-	if req.User.Password != nil && req.User.GetPassword() != "" {
-		cryptoPassword, err := crypto.HashPassword(req.User.GetPassword())
+	if req.Data.Password != nil && req.Data.GetPassword() != "" {
+		cryptoPassword, err := crypto.HashPassword(req.Data.GetPassword())
 		if err != nil {
 			return nil, err
 		}
-		req.User.Password = &cryptoPassword
+		req.Data.Password = &cryptoPassword
 	}
 
-	result, err := r.repository.Upsert(ctx, r.data.db, req.User, req.GetUpdateMask())
+	result, err := r.repository.Upsert(ctx, r.data.db, req.Data, req.GetUpdateMask())
 
 	return result, err
 }

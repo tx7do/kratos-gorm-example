@@ -1,0 +1,437 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: UserService API
+    description: 用户服务
+    version: 0.0.1
+paths:
+    /users:
+        get:
+            tags:
+                - UserService
+            description: 查询用户列表
+            operationId: UserService_ListUser
+            parameters:
+                - name: page
+                  in: query
+                  description: 当前页码（从1开始，默认1）
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: pageSize
+                  in: query
+                  description: 每页条数（默认10，建议设置上限如100）
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: offset
+                  in: query
+                  description: 跳过的记录数（从0开始，默认0）
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  description: 最多返回的记录数（默认10，建议设置上限如100）
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: token
+                  in: query
+                  description: 上一页最后一条记录的游标（如ID/时间戳+ID，首次请求为空）
+                  schema:
+                    type: string
+                - name: noPaging
+                  in: query
+                  description: 是否不分页，如果为true，则page和pageSize参数无效。
+                  schema:
+                    type: boolean
+                - name: orderBy
+                  in: query
+                  description: 排序条件，其语法为JSON字符串，例如：{"val1", "-val2"}。字段名前加'-'为降序，否则为升序。
+                  schema:
+                    type: array
+                    items:
+                        type: string
+                - name: query
+                  in: query
+                  description: AND过滤参数，其语法为json格式的字符串，如：{"key1":"val1","key2":"val2"}，具体请参见：https://github.com/tx7do/go-utils/tree/main/entgo/query/README.md
+                  schema:
+                    type: string
+                - name: or
+                  in: query
+                  description: OR过滤参数，语法同AND过滤参数。
+                  schema:
+                    type: string
+                - name: filterExpr.type
+                  in: query
+                  description: 过滤表达式类型
+                  schema:
+                    enum:
+                        - EXPR_TYPE_UNSPECIFIED
+                        - AND
+                        - OR
+                    type: string
+                    format: enum
+                - name: fieldMask
+                  in: query
+                  description: 字段掩码，其作用为SELECT中的字段，其语法为使用逗号分隔字段名，例如：id,realName,userName。如果为空则选中所有字段，即SELECT *。
+                  schema:
+                    type: string
+                    format: field-mask
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListUserResponse'
+        post:
+            tags:
+                - UserService
+            description: 创建用户
+            operationId: UserService_CreateUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+    /users/list:
+        post:
+            tags:
+                - UserService
+            description: 查询用户列表
+            operationId: UserService_ListUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PagingRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListUserResponse'
+    /users/username/{userName}:
+        get:
+            tags:
+                - UserService
+            description: 查询用户详情
+            operationId: UserService_GetUser
+            parameters:
+                - name: userName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: id
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: viewMask
+                  in: query
+                  schema:
+                    type: string
+                    format: field-mask
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+    /users/{data.id}:
+        put:
+            tags:
+                - UserService
+            description: 更新用户
+            operationId: UserService_UpdateUser
+            parameters:
+                - name: data.id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+    /users/{id}:
+        get:
+            tags:
+                - UserService
+            description: 查询用户详情
+            operationId: UserService_GetUser
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: userName
+                  in: query
+                  schema:
+                    type: string
+                - name: viewMask
+                  in: query
+                  schema:
+                    type: string
+                    format: field-mask
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+        delete:
+            tags:
+                - UserService
+            description: 删除用户
+            operationId: UserService_DeleteUser
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: operatorId
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+components:
+    schemas:
+        Condition:
+            type: object
+            properties:
+                field:
+                    type: string
+                    description: 过滤字段名
+                op:
+                    enum:
+                        - OPERATOR_UNSPECIFIED
+                        - EQ
+                        - NEQ
+                        - GT
+                        - GTE
+                        - LT
+                        - LTE
+                        - LIKE
+                        - ILIKE
+                        - NOT_LIKE
+                        - IN
+                        - NIN
+                        - IS_NULL
+                        - IS_NOT_NULL
+                        - BETWEEN
+                        - REGEXP
+                        - IREGEXP
+                        - CONTAINS
+                        - STARTS_WITH
+                        - ENDS_WITH
+                        - ICONTAINS
+                        - ISTARTS_WITH
+                        - IENDS_WITH
+                        - JSON_CONTAINS
+                        - ARRAY_CONTAINS
+                        - EXISTS
+                        - SEARCH
+                        - EXACT
+                        - IEXACT
+                    type: string
+                    description: 过滤操作符
+                    format: enum
+                value:
+                    type: string
+                    description: 过滤值（单值）
+                values:
+                    type: array
+                    items:
+                        type: string
+                    description: 过滤值（多值，如IN操作符）
+            description: 单个条件
+        CreateUserRequest:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/User'
+                operatorId:
+                    type: integer
+                    description: 操作者用户ID
+                    format: uint32
+            description: 创建用户 - 请求
+        FilterExpr:
+            type: object
+            properties:
+                type:
+                    enum:
+                        - EXPR_TYPE_UNSPECIFIED
+                        - AND
+                        - OR
+                    type: string
+                    description: 过滤表达式类型
+                    format: enum
+                conditions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Condition'
+                    description: 条件列表
+                groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/FilterExpr'
+                    description: 子表达式列表
+            description: 过滤表达式
+        ListUserResponse:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/User'
+                total:
+                    type: string
+            description: 获取用户列表 - 答复
+        PagingRequest:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    default: !!float 1
+                    description: 当前页码（从1开始，默认1）
+                    format: uint32
+                pageSize:
+                    type: integer
+                    default: !!float 10
+                    description: 每页条数（默认10，建议设置上限如100）
+                    format: uint32
+                offset:
+                    type: string
+                    default: !!float 0
+                    description: 跳过的记录数（从0开始，默认0）
+                limit:
+                    type: integer
+                    default: !!float 10
+                    description: 最多返回的记录数（默认10，建议设置上限如100）
+                    format: uint32
+                token:
+                    type: string
+                    description: 上一页最后一条记录的游标（如ID/时间戳+ID，首次请求为空）
+                noPaging:
+                    type: boolean
+                    description: 是否不分页，如果为true，则page和pageSize参数无效。
+                orderBy:
+                    example: {"val1": '', "-val2": ''}
+                    type: array
+                    items:
+                        type: string
+                    description: 排序条件，其语法为JSON字符串，例如：{"val1", "-val2"}。字段名前加'-'为降序，否则为升序。
+                sorting:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Sorting'
+                    description: 排序规则（可选，建议必传以保证分页结果稳定）
+                query:
+                    example: {"key1": "val1", "key2": "val2"}
+                    type: string
+                    description: AND过滤参数，其语法为json格式的字符串，如：{"key1":"val1","key2":"val2"}，具体请参见：https://github.com/tx7do/go-utils/tree/main/entgo/query/README.md
+                or:
+                    example: {"key1": "val1", "key2": "val2"}
+                    type: string
+                    description: OR过滤参数
+                filterExpr:
+                    allOf:
+                        - $ref: '#/components/schemas/FilterExpr'
+                    description: 复杂过滤表达式
+                fieldMask:
+                    example: id,realName,userName
+                    type: string
+                    description: 字段掩码，其作用为SELECT中的字段，其语法为使用逗号分隔字段名，例如：id,realName,userName。如果为空则选中所有字段，即SELECT *。
+                    format: field-mask
+            description: "------------------------------\r\n 分页通用请求\r\n ------------------------------"
+        Sorting:
+            type: object
+            properties:
+                field:
+                    type: string
+                    description: 排序字段（如"id"、"create_time"）
+                order:
+                    enum:
+                        - ASC
+                        - DESC
+                    type: string
+                    format: enum
+            description: 排序规则（分页场景通常需配合排序保证结果稳定）
+        UpdateUserRequest:
+            type: object
+            properties:
+                data:
+                    $ref: '#/components/schemas/User'
+                updateMask:
+                    example: id,realname,username
+                    type: string
+                    description: 要更新的字段列表
+                    format: field-mask
+                allowMissing:
+                    type: boolean
+                    description: 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
+            description: 更新用户 - 请求
+        User:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                userName:
+                    type: string
+                    description: 账户名
+                nickName:
+                    type: string
+                    description: 昵称
+                password:
+                    type: string
+                    description: 密码
+                createdAt:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updatedAt:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                deletedAt:
+                    type: string
+                    description: 删除时间
+                    format: date-time
+            description: 用户
+tags:
+    - name: UserService

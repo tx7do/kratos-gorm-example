@@ -3,9 +3,12 @@ syntax = "proto3";
 package user.service.v1;
 
 import "gnostic/openapi/v3/annotations.proto";
+
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/field_mask.proto";
+
+import "google/api/annotations.proto";
 
 import "pagination/v1/pagination.proto";
 
@@ -14,27 +17,57 @@ import "pagination/v1/pagination.proto";
 // 用户服务
 service UserService {
   // 查询用户列表
-  rpc ListUser (pagination.PagingRequest) returns (ListUserResponse) {}
+  rpc ListUser (pagination.PagingRequest) returns (ListUserResponse) {
+    option (google.api.http) = {
+      get: "/users"
+      additional_bindings {
+        post: "/users/list"
+        body: "*"
+      }
+    };
+  }
 
   // 查询用户详情
-  rpc GetUser (GetUserRequest) returns (User) {}
+  rpc GetUser (GetUserRequest) returns (User) {
+    option (google.api.http) = {
+      get: "/users/{id}"
+      additional_bindings {
+        get: "/users/username/{user_name}"
+      }
+    };
+  }
 
   // 创建用户
-  rpc CreateUser (CreateUserRequest) returns (User) {}
+  rpc CreateUser (CreateUserRequest) returns (User) {
+    option (google.api.http) = {
+      post: "/users"
+      body: "*"
+    };
+  }
 
   // 更新用户
-  rpc UpdateUser (UpdateUserRequest) returns (User) {}
+  rpc UpdateUser (UpdateUserRequest) returns (User) {
+    option (google.api.http) = {
+      put: "/users/{data.id}"
+      body: "*"
+    };
+  }
 
   // 删除用户
-  rpc DeleteUser (DeleteUserRequest) returns (google.protobuf.Empty) {}
+  rpc DeleteUser (DeleteUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/users/{id}"
+    };
+  }
 }
 
 // 用户
 message User {
   uint32 id = 1;
-  optional string userName = 2;
-  optional string nickName = 3;
-  optional string password = 4;
+
+  optional string user_name = 2 [json_name = "userName", (gnostic.openapi.v3.property) = {description: "账户名"}];// 账户名
+  optional string nick_name = 3 [json_name = "nickName", (gnostic.openapi.v3.property) = {description: "昵称"}];// 昵称
+  optional string password = 4 [json_name = "password", (gnostic.openapi.v3.property) = {description: "密码"}];// 密码
 
   optional google.protobuf.Timestamp created_at = 200 [json_name = "createdAt", (gnostic.openapi.v3.property) = {description: "创建时间"}];// 创建时间
   optional google.protobuf.Timestamp updated_at = 201 [json_name = "updatedAt", (gnostic.openapi.v3.property) = {description: "更新时间"}];// 更新时间
@@ -55,9 +88,9 @@ message GetUserRequest {
       json_name = "id"
     ]; // 用户ID
 
-    string username = 2 [
+    string user_name = 2 [
       (gnostic.openapi.v3.property) = {description: "用户登录名", read_only: true},
-      json_name = "username"
+      json_name = "userName"
     ]; // 用户登录名
   }
 
@@ -71,14 +104,14 @@ message GetUserRequest {
 
 // 创建用户 - 请求
 message CreateUserRequest {
-  User user = 1;
+  User data = 1;
 
-  uint32 operatorId = 2;
+  uint32 operator_id = 2 [json_name = "operatorId", (gnostic.openapi.v3.property) = {description: "操作者用户ID"}];// 操作者用户ID
 }
 
 // 更新用户 - 请求
 message UpdateUserRequest {
-  User user = 1;
+  User data = 1;
 
   google.protobuf.FieldMask update_mask = 2 [
     json_name = "updateMask",
@@ -97,5 +130,6 @@ message UpdateUserRequest {
 // 删除用户 - 请求
 message DeleteUserRequest {
   uint32 id = 1;
-  uint32 operatorId = 2;
+
+  uint32 operator_id = 2 [json_name = "operatorId", (gnostic.openapi.v3.property) = {description: "操作者用户ID"}];// 操作者用户ID
 }

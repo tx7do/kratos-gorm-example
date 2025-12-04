@@ -15,11 +15,11 @@ import (
 
 // NewGRPCServer new a gRPC server.
 func NewGRPCServer(cfg *conf.Bootstrap, logger log.Logger,
-	userSvc *service.UserService,
+	userService *service.UserService,
 ) *grpc.Server {
 	srv := bootstrap.CreateGrpcServer(cfg, logging.Server(logger))
 
-	userV1.RegisterUserServiceServer(srv, userSvc)
+	userV1.RegisterUserServiceServer(srv, userService)
 
 	return srv
 }
