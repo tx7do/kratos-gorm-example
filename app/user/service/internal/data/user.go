@@ -124,7 +124,9 @@ func (r *UserRepo) Update(ctx context.Context, req *userV1.UpdateUserRequest) (*
 
 	result, err := r.repository.Update(ctx,
 		r.data.db.Where("id = ?", req.Data.GetId()),
-		req.Data, req.GetUpdateMask())
+		req.Data,
+		req.GetUpdateMask(),
+	)
 
 	return result, err
 }
@@ -154,7 +156,11 @@ func (r *UserRepo) Delete(ctx context.Context, req *userV1.DeleteUserRequest) (b
 		return false, errors.New("request is nil")
 	}
 
-	result, err := r.repository.Delete(ctx, r.data.db.Where("id = ?", req.GetId()))
+	result, err := r.repository.Delete(
+		ctx,
+		r.data.db.Where("id = ?", req.GetId()),
+		true,
+	)
 
 	return result > 0, err
 }

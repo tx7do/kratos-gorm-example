@@ -15,7 +15,7 @@ require (
 	github.com/olekukonko/tablewriter v1.1.2
 	github.com/spf13/cobra v1.10.2
 	github.com/tx7do/go-crud v0.0.5
-	github.com/tx7do/go-crud/gorm v0.0.3
+	github.com/tx7do/go-crud/gorm v0.0.4
 	github.com/tx7do/go-utils v1.1.34
 	github.com/tx7do/go-utils/copierutil v0.0.6
 	github.com/tx7do/go-utils/mapper v0.0.3
